@@ -313,6 +313,39 @@
   /* ADD GOAL FORM */
   .add-goal-form { display:flex; gap:8px; flex-wrap:wrap; padding:12px; background:rgba(124,106,247,0.04); border:1px dashed rgba(124,106,247,0.2); border-radius:10px; margin-bottom:14px; }
 
+
+  /* SETUP SCREEN */
+  .setup-overlay {
+    position: fixed; inset: 0; background: var(--bg); z-index: 999;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans);
+  }
+  .setup-box {
+    background: var(--surface); border: 1px solid rgba(124,106,247,0.3);
+    border-radius: 20px; padding: 40px; width: 520px; max-width: 90vw;
+    box-shadow: 0 0 60px rgba(124,106,247,0.1);
+  }
+  .setup-logo { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 3px; margin-bottom: 8px; }
+  .setup-version { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 28px; }
+  .setup-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .setup-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+  .setup-steps { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+  .setup-step { display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border); }
+  .setup-step-num { font-family: var(--mono); font-size: 11px; color: var(--accent); background: rgba(124,106,247,0.1); border: 1px solid rgba(124,106,247,0.2); border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; }
+  .setup-step-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .setup-step-text a { color: var(--accent2); text-decoration: none; }
+  .setup-step-text a:hover { text-decoration: underline; }
+  .setup-step-text strong { color: var(--accent3); }
+  .setup-input-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 8px; }
+  .setup-input { width: 100%; background: var(--surface2); border: 1px solid rgba(124,106,247,0.3); border-radius: 10px; padding: 12px 16px; color: var(--text); font-family: var(--mono); font-size: 13px; outline: none; transition: border-color 0.2s; margin-bottom: 10px; }
+  .setup-input:focus { border-color: var(--accent); }
+  .setup-input::placeholder { color: var(--muted); }
+  .setup-error { font-size: 12px; color: var(--red); margin-bottom: 10px; display: none; }
+  .setup-btn { width: 100%; padding: 14px; border-radius: 10px; background: var(--accent); border: none; color: white; font-family: var(--mono); font-size: 13px; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; margin-bottom: 14px; }
+  .setup-btn:hover { background: #6b5de0; }
+  .setup-note { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.5; }
+  .setup-note span { color: var(--accent3); }
+
   ::-webkit-scrollbar { width:3px; }
   ::-webkit-scrollbar-track { background:var(--bg); }
   ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
@@ -327,6 +360,42 @@
 <body>
 
 <!-- HEADER -->
+
+<!-- SETUP SCREEN -->
+<div class="setup-overlay" id="setupOverlay">
+  <div class="setup-box">
+    <div class="setup-logo">CAREER_TRACKER</div>
+    <div class="setup-version">KAIZEN v02.5 · FIRST TIME SETUP</div>
+    <div class="setup-title">Welcome! Let's activate your AI Coach. 🤖</div>
+    <div class="setup-sub">Your AI coach needs a free OpenRouter API key to work. This takes 2 minutes and your key is stored only on <strong>your device</strong> — never on any server.</div>
+    
+    <div class="setup-steps">
+      <div class="setup-step">
+        <div class="setup-step-num">1</div>
+        <div class="setup-step-text">Go to <a href="https://openrouter.ai" target="_blank">openrouter.ai</a> and create a free account</div>
+      </div>
+      <div class="setup-step">
+        <div class="setup-step-num">2</div>
+        <div class="setup-step-text">Click your profile → <strong>Security</strong> → <strong>Create Key</strong> → copy it</div>
+      </div>
+      <div class="setup-step">
+        <div class="setup-step-num">3</div>
+        <div class="setup-step-text">Paste your key below and click <strong>Activate</strong></div>
+      </div>
+    </div>
+
+    <div class="setup-input-label">YOUR OPENROUTER API KEY</div>
+    <input class="setup-input" id="setupKeyInput" placeholder="sk-or-v1-..." type="password">
+    <div class="setup-error" id="setupError">⚠️ Please enter a valid OpenRouter key (starts with sk-or-v1-)</div>
+    <button class="setup-btn" onclick="activateKey()">ACTIVATE AI COACH →</button>
+    <div class="setup-note">
+      <span>🔒 Your key never leaves your device.</span> It's saved in your browser's local storage only.<br>
+      You can skip this and use the tracker without the AI coach.
+      <br><a href="#" onclick="skipSetup()" style="color:var(--muted);font-size:11px">Skip for now →</a>
+    </div>
+  </div>
+</div>
+
 <header class="header">
   <div class="logo-block">
     <div class="logo">CAREER_TRACKER</div>
@@ -412,7 +481,7 @@
         <div class="ai-chat-header">
           <div class="ai-chat-dot"></div>
           <div class="ai-chat-title">CISO ADVISOR</div>
-          <div class="ai-chat-badge">powered by Claude</div>
+          <div class="ai-chat-badge" style="cursor:pointer" onclick="resetApiKey()" title="Change API key">⚙️ key</div>
         </div>
         <div class="ai-messages" id="aiMessages">
           <div class="ai-msg assistant">👋 Hi! I'm your CISO career coach. Ask me anything about security frameworks, career strategy, habits, or your roadmap.</div>
@@ -812,8 +881,47 @@ let idCounter = 200;
 let currentQuoteIndex = 0;
 let aiConversation = [];
 
+
+// ===== SETUP SCREEN =====
+function checkSetup() {
+  const key = localStorage.getItem('or_api_key');
+  if(key) {
+    document.getElementById('setupOverlay').style.display = 'none';
+  }
+}
+
+function activateKey() {
+  const input = document.getElementById('setupKeyInput');
+  const key = input.value.trim();
+  const error = document.getElementById('setupError');
+  
+  if(!key.startsWith('sk-or-v1-')) {
+    error.style.display = 'block';
+    return;
+  }
+  
+  error.style.display = 'none';
+  localStorage.setItem('or_api_key', key);
+  document.getElementById('setupOverlay').style.display = 'none';
+  
+  // Show success in AI chat
+  setTimeout(() => {
+    appendAiMessage('assistant', '✅ API key activated! I am your CISO career coach. Ask me anything about security frameworks, career strategy, habits, or your roadmap!');
+  }, 500);
+}
+
+function skipSetup() {
+  document.getElementById('setupOverlay').style.display = 'none';
+}
+
+function resetApiKey() {
+  localStorage.removeItem('or_api_key');
+  document.getElementById('setupOverlay').style.display = 'flex';
+}
+
 // ===== INIT =====
 function init() {
+  checkSetup();
   document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   document.getElementById('modalDate').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   document.getElementById('weekLabel').textContent = getWeekLabel();
@@ -1173,7 +1281,7 @@ Keep responses concise, warm, and actionable. Use bullet points for multi-step a
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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',
+        'Authorization': 'Bearer ' + (localStorage.getItem('or_api_key') || ''),
         'HTTP-Referer': 'https://corvus-one.github.io/ciso-career-tracker/',
         'X-Title': 'CISO Career Tracker'
       },
