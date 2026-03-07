@@ -1174,12 +1174,11 @@ Keep responses concise, warm, and actionable. Use bullet points for multi-step a
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer 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',
-        'HTTP-Referer': 'https://corvus-one.github.io',
-        'X-Title': 'CISO Career Tracker',
-        'anthropic-version': '2023-06-01'
+        'HTTP-Referer': 'https://corvus-one.github.io/ciso-career-tracker/',
+        'X-Title': 'CISO Career Tracker'
       },
       body: JSON.stringify({
-        model: 'anthropic/claude-3-haiku',
+        model: 'mistralai/mistral-7b-instruct:free',
         max_tokens: 1000,
         messages: [
           {role: 'system', content: systemPrompt},
