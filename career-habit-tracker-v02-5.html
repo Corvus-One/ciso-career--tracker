@@ -1188,13 +1188,19 @@ Keep responses concise, warm, and actionable. Use bullet points for multi-step a
     });
 
     const data = await response.json();
+    if(data.error) {
+      removeThinking();
+      appendAiMessage('assistant', '⚠️ API Error: ' + data.error.message);
+      btn.disabled = false; input.focus(); return;
+    }
     const reply = data.choices?.[0]?.message?.content || "Sorry, I couldn't get a response. Please try again.";
     aiConversation.push({role:'assistant', content: reply});
     removeThinking();
     appendAiMessage('assistant', reply);
   } catch(e) {
     removeThinking();
-    appendAiMessage('assistant', '⚠️ Connection issue. Please check your internet and try again.');
+    console.error('AI Error:', e);
+    appendAiMessage('assistant', '⚠️ Error: ' + e.message);
   }
 
   btn.disabled = false;
