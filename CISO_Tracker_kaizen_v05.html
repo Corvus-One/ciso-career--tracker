@@ -22,6 +22,7 @@
 <title>CISO Career Tracker · Kaizen v05.0</title>
 <link rel="manifest" href="CISO_Tracker_manifest.json">
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1196,17 +1197,15 @@
       </div>
       <div class="charts-grid">
         <div class="card">
-          <div class="card-header"><div class="card-title">8-Week Trend</div></div>
-          <div class="mini-chart">
-            <div class="mct">// COMPLETION %</div>
-            <div class="bar-chart" id="weeklyBarChart"></div>
+          <div class="card-header"><div class="card-title">8-Week Trend</div><div class="card-badge">COMPLETION %</div></div>
+          <div style="position:relative;height:140px;padding:4px 0">
+            <canvas id="weeklyBarChart"></canvas>
           </div>
         </div>
         <div class="card">
-          <div class="card-header"><div class="card-title">Category Balance</div></div>
-          <div class="mini-chart">
-            <div class="mct">// THIS WEEK</div>
-            <div class="radial-row" id="radialChart"></div>
+          <div class="card-header"><div class="card-title">Category Balance</div><div class="card-badge">THIS WEEK</div></div>
+          <div style="position:relative;height:140px;padding:4px 0">
+            <canvas id="radialChart"></canvas>
           </div>
         </div>
       </div>
@@ -1524,6 +1523,8 @@ function toggleTheme() {
   iconEl.innerHTML = isLight ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>';
   document.getElementById('themeLabel').textContent = isLight ? 'LIGHT' : 'DARK';
   if(typeof lucide !== 'undefined') lucide.createIcons();
+  // Re-render charts with correct theme colors
+  renderWeekly();
   try { localStorage.setItem('theme_v30', isLight ? 'light' : 'dark'); } catch(e){}
 }
 function loadTheme() {
@@ -1918,24 +1919,123 @@ function renderWeekly(){
       <button class="wk-del" onclick="deleteHabit(${h.id})" title="Remove habit">✕</button>
     </div>`;
   }).join('');
-  const fakeData=[55,70,48,82,65,78,71,84];
-  document.getElementById('weeklyBarChart').innerHTML=['W-7','W-6','W-5','W-4','W-3','W-2','W-1','NOW'].map((l,i)=>`
-    <div class="bar-col">
-      <div class="bar" style="height:${fakeData[i]}%;background:${i===7?'var(--accent)':'var(--surface3)'};border:1px solid ${i===7?'var(--accent)':'var(--border)'}"></div>
-      <div class="bar-lbl">${l}</div>
-    </div>`).join('');
-  const cats=[{n:'TECH',v:0.72,c:'var(--accent2)'},{n:'LEAD',v:0.58,c:'var(--accent3)'},{n:'LEARN',v:0.84,c:'var(--accent4)'},{n:'HLTH',v:0.45,c:'var(--accent5)'}];
-  document.getElementById('radialChart').innerHTML=cats.map(c=>{
-    const r=26,circ=2*Math.PI*r,dash=circ*c.v,gap=circ*(1-c.v);
-    return `<div class="radial-item">
-      <svg width="64" height="64" viewBox="0 0 64 64">
-        <circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--border)" stroke-width="6"/>
-        <circle cx="32" cy="32" r="${r}" fill="none" stroke="${c.c}" stroke-width="6" stroke-dasharray="${dash} ${gap}" stroke-linecap="round" transform="rotate(-90 32 32)"/>
-        <text x="32" y="36" text-anchor="middle" fill="${c.c}" font-family="Space Mono" font-size="10" font-weight="bold">${Math.round(c.v*100)}%</text>
-      </svg>
-      <div class="radial-lbl">${c.n}</div>
-    </div>`;
-  }).join('');
+
+  // ── Chart.js Bar Chart — 8 Week Trend ──
+  const barCtx = document.getElementById('weeklyBarChart');
+  if(barCtx && typeof Chart !== 'undefined') {
+    if(window._barChart) window._barChart.destroy();
+    const isDark = !document.body.classList.contains('light');
+    const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+    const textColor = isDark ? '#5a6480' : '#888';
+    const accentColor = '#7c6af7';
+    const mutedColor = isDark ? '#222736' : '#e8e8f0';
+    const fakeData = [55,70,48,82,65,78,71,84];
+    window._barChart = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: ['W-7','W-6','W-5','W-4','W-3','W-2','W-1','NOW'],
+        datasets: [{
+          data: fakeData,
+          backgroundColor: fakeData.map((v,i) => i===7 ? accentColor : mutedColor),
+          borderColor: fakeData.map((v,i) => i===7 ? accentColor : 'transparent'),
+          borderWidth: 1,
+          borderRadius: 4,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: isDark ? '#1a1e28' : '#fff',
+            titleColor: isDark ? '#e2e8f0' : '#1a1e2e',
+            bodyColor: accentColor,
+            borderColor: isDark ? '#272d3d' : '#d0d5e8',
+            borderWidth: 1,
+            callbacks: { label: ctx => ` ${ctx.raw}% completion` }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: textColor, font: { family: 'Space Mono', size: 9 } }
+          },
+          y: {
+            min: 0, max: 100,
+            grid: { color: gridColor },
+            ticks: {
+              color: textColor,
+              font: { family: 'Space Mono', size: 9 },
+              callback: v => v + '%',
+              maxTicksLimit: 5
+            }
+          }
+        },
+        animation: { duration: 600, easing: 'easeOutQuart' }
+      }
+    });
+  }
+
+  // ── Chart.js Doughnut — Category Balance ──
+  const radCtx = document.getElementById('radialChart');
+  if(radCtx && typeof Chart !== 'undefined') {
+    if(window._radialChart) window._radialChart.destroy();
+    const isDark = !document.body.classList.contains('light');
+    // Calculate real category completion rates from this week
+    const catMap = {};
+    HABITS.forEach(h => {
+      if(!catMap[h.cat]) catMap[h.cat] = {done:0,total:0};
+      for(let i=0;i<7;i++){
+        const d=new Date(sow); d.setDate(d.getDate()+i);
+        const key=dateKey(d);
+        catMap[h.cat].total++;
+        if(habitChecks[key]?.[h.id]) catMap[h.cat].done++;
+      }
+    });
+    const cats = Object.keys(catMap).slice(0,5);
+    const values = cats.map(c => catMap[c].total > 0 ? Math.round(catMap[c].done/catMap[c].total*100) : 0);
+    const colors = ['#4fc3f7','#69f0ae','#ff8a65','#f06292','#7c6af7'];
+    window._radialChart = new Chart(radCtx, {
+      type: 'doughnut',
+      data: {
+        labels: cats,
+        datasets: [{
+          data: values.length ? values : [25,25,25,25],
+          backgroundColor: colors.slice(0, values.length || 4),
+          borderColor: isDark ? '#12151c' : '#ffffff',
+          borderWidth: 3,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              color: isDark ? '#5a6480' : '#888',
+              font: { family: 'Space Mono', size: 9 },
+              boxWidth: 10,
+              padding: 8
+            }
+          },
+          tooltip: {
+            backgroundColor: isDark ? '#1a1e28' : '#fff',
+            titleColor: isDark ? '#e2e8f0' : '#1a1e2e',
+            bodyColor: isDark ? '#e2e8f0' : '#1a1e2e',
+            borderColor: isDark ? '#272d3d' : '#d0d5e8',
+            borderWidth: 1,
+            callbacks: { label: ctx => ` ${ctx.raw}% this week` }
+          }
+        },
+        animation: { duration: 700, easing: 'easeOutQuart' }
+      }
+    });
+  }
 }
 function toggleWeekDay(hid,key){if(!habitChecks[key])habitChecks[key]={};habitChecks[key][hid]=!habitChecks[key][hid];save();renderWeekly();if(dateKey(new Date())===key)renderHabits();}
 
