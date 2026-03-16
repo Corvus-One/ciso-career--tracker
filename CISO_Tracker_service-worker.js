@@ -4,7 +4,7 @@ const BASE = '/ciso-career-tracker/';
 
 const ASSETS_TO_CACHE = [
   BASE + 'CISO_Tracker_kaizen_v05.html',
-  BASE + 'manifest.json',
+  BASE + 'CISO_Tracker_manifest.json',
   'https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap',
 ];
 
