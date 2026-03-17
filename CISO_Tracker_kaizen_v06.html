@@ -598,38 +598,81 @@
   /* ── INTERVIEW PREP ── */
   .interview-overlay { display:none; position:fixed; top:0; right:0; bottom:0; left:0; background:var(--overlay-bg); backdrop-filter:blur(8px); z-index:260; align-items:center; justify-content:center; }
   .interview-overlay.open { display:flex; }
-  .interview-box { background:var(--surface); border:1px solid var(--border); border-radius:18px; width:min(820px,95vw); max-height:90vh; display:flex; flex-direction:column; overflow:hidden; }
+  .interview-box { background:var(--surface); border:1px solid var(--border); border-radius:18px; width:min(1100px,97vw); max-height:93vh; display:flex; flex-direction:column; overflow:hidden; }
   .interview-head { display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--border); background:var(--surface2); flex-shrink:0; }
   .interview-title { font-family:var(--mono); font-size:12px; color:var(--accent5); letter-spacing:3px; }
   .interview-close { background:var(--surface3); border:1px solid var(--border); color:var(--muted); border-radius:6px; padding:5px 12px; cursor:pointer; font-size:12px; font-family:var(--mono); }
   .interview-close:hover { border-color:var(--red); color:var(--red); }
   .interview-body { display:flex; flex:1; overflow:hidden; }
-  .interview-sidebar { width:220px; border-right:1px solid var(--border); padding:14px; overflow-y:auto; flex-shrink:0; background:var(--surface2); }
+  .interview-sidebar { width:200px; border-right:1px solid var(--border); padding:14px; overflow-y:auto; flex-shrink:0; background:var(--surface2); -webkit-overflow-scrolling:touch; }
   .interview-cat-btn { display:block; width:100%; text-align:left; padding:8px 10px; border-radius:8px; border:1px solid transparent; background:transparent; color:var(--muted); font-family:var(--mono); font-size:10px; letter-spacing:1px; cursor:pointer; transition:all 0.2s; margin-bottom:4px; }
   .interview-cat-btn:hover { background:var(--surface3); color:var(--text); }
   .interview-cat-btn.active { background:rgba(240,98,146,0.12); border-color:rgba(240,98,146,0.3); color:var(--accent5); }
-  .interview-main { flex:1; overflow-y:auto; padding:20px; }
-  .interview-q-card { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:14px; transition:border-color 0.2s; }
-  .interview-q-card:hover { border-color:var(--accent5); }
-  .interview-q-text { font-size:14px; color:var(--text); font-weight:500; margin-bottom:12px; line-height:1.5; }
-  .interview-q-meta { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  /* Question list panel */
+  .interview-main { width:320px; flex-shrink:0; overflow-y:auto; padding:16px; border-right:1px solid var(--border); -webkit-overflow-scrolling:touch; }
+  .interview-q-card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:13px 14px; margin-bottom:10px; transition:all 0.2s; cursor:pointer; }
+  .interview-q-card:hover { border-color:var(--accent5); background:var(--surface3); }
+  .interview-q-card.active { border-color:var(--accent5); background:rgba(240,98,146,0.08); }
+  .interview-q-text { font-size:13px; color:var(--text); font-weight:500; line-height:1.45; }
+  .interview-q-mini-stars { display:flex; gap:2px; margin-top:6px; }
+  .interview-q-mini-star { font-size:11px; color:var(--border); }
+  .interview-q-mini-star.lit { color:var(--yellow); }
+  .interview-q-meta { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
   .interview-q-level { font-family:var(--mono); font-size:10px; padding:2px 8px; border-radius:10px; }
   .interview-q-level.strategic { background:rgba(124,106,247,0.12); color:var(--accent); }
   .interview-q-level.technical { background:rgba(79,195,247,0.12); color:var(--accent2); }
   .interview-q-level.behavioral { background:rgba(105,240,174,0.12); color:var(--accent3); }
+  .interview-q-level.board { background:rgba(255,211,42,0.12); color:var(--yellow); }
+  .interview-q-level.risk { background:rgba(255,71,87,0.12); color:var(--red); }
+  /* Reading pane */
+  .interview-pane { flex:1; display:flex; flex-direction:column; overflow:hidden; background:var(--bg); }
+  .interview-pane-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--muted); }
+  .interview-pane-empty-icon { font-size:40px; opacity:0.4; }
+  .interview-pane-empty-text { font-family:var(--mono); font-size:11px; letter-spacing:2px; }
+  .interview-pane-content { flex:1; overflow-y:auto; padding:28px 32px; display:flex; flex-direction:column; gap:20px; -webkit-overflow-scrolling:touch; }
+  .interview-pane-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+  .interview-pane-q { font-size:20px; font-weight:700; color:var(--text); line-height:1.4; flex:1; }
+  .interview-pane-nav { display:flex; gap:8px; flex-shrink:0; }
+  .interview-pane-nav-btn { background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--muted); font-family:var(--mono); font-size:11px; padding:6px 12px; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+  .interview-pane-nav-btn:hover { border-color:var(--accent5); color:var(--accent5); }
+  .interview-pane-meta { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .interview-pane-confidence { display:flex; align-items:center; gap:8px; }
+  .interview-pane-conf-label { font-family:var(--mono); font-size:11px; color:var(--muted); }
+  .interview-pane-star { background:transparent; border:none; cursor:pointer; font-size:22px; padding:2px; transition:transform 0.15s; color:var(--border); }
+  .interview-pane-star.lit { color:var(--yellow); }
+  .interview-pane-star:hover { transform:scale(1.2); }
+  .interview-pane-section-label { font-family:var(--mono); font-size:10px; color:var(--accent5); letter-spacing:2px; margin-bottom:8px; }
+  .interview-pane-notes { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; color:var(--text); font-family:var(--sans); font-size:14px; resize:none; outline:none; line-height:1.7; min-height:160px; transition:border-color 0.2s; -webkit-overflow-scrolling:touch; }
+  .interview-pane-notes:focus { border-color:var(--accent5); }
+  .interview-pane-tips { background:var(--surface2); border:1px solid var(--border); border-left:3px solid var(--accent5); border-radius:0 10px 10px 0; padding:14px 16px; }
+  .interview-pane-tip { font-size:13px; color:var(--muted); line-height:1.6; padding:4px 0; display:flex; gap:8px; }
+  .interview-pane-tip::before { content:'→'; color:var(--accent5); flex-shrink:0; }
+  .interview-pane-footer { border-top:1px solid var(--border); padding:14px 32px; display:flex; align-items:center; justify-content:space-between; background:var(--surface2); flex-shrink:0; }
+  .interview-pane-counter { font-family:var(--mono); font-size:11px; color:var(--muted); }
+  .interview-pane-save-btn { padding:8px 20px; border-radius:8px; background:var(--accent5); border:none; color:white; font-family:var(--mono); font-size:11px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:all 0.2s; }
+  .interview-pane-save-btn:hover { opacity:0.85; }
+  /* Stats row */
+  .interview-stats-row { display:flex; gap:10px; margin-bottom:14px; }
+  .interview-stat { flex:1; background:var(--surface2); border-radius:8px; padding:10px; text-align:center; border:1px solid var(--border); }
+  .interview-stat-num { font-family:var(--mono); font-size:18px; font-weight:700; }
+  .interview-stat-lbl { font-size:10px; color:var(--muted); margin-top:2px; }
   .interview-confidence { display:flex; align-items:center; gap:6px; }
   .interview-conf-label { font-family:var(--mono); font-size:10px; color:var(--muted); }
   .conf-star { background:transparent; border:none; cursor:pointer; font-size:16px; padding:1px; transition:transform 0.15s; color:var(--border); }
   .conf-star.lit { color:var(--yellow); }
   .conf-star:hover { transform:scale(1.2); }
-  .interview-notes-area { width:100%; background:var(--surface3); border:1px solid var(--border); border-radius:8px; padding:8px 10px; color:var(--text); font-family:var(--sans); font-size:12px; resize:none; outline:none; line-height:1.5; margin-top:8px; }
-  .interview-notes-area:focus { border-color:var(--accent5); }
   .interview-progress-bar { height:4px; background:var(--border); border-radius:2px; margin-top:14px; overflow:hidden; }
   .interview-progress-fill { height:100%; background:linear-gradient(90deg, var(--accent5), var(--accent)); border-radius:2px; transition:width 0.5s; }
-  .interview-stats-row { display:flex; gap:10px; margin-bottom:16px; }
-  .interview-stat { flex:1; background:var(--surface2); border-radius:8px; padding:10px; text-align:center; border:1px solid var(--border); }
-  .interview-stat-num { font-family:var(--mono); font-size:18px; font-weight:700; }
-  .interview-stat-lbl { font-size:10px; color:var(--muted); margin-top:2px; }
+  /* Mobile interview */
+  @media(max-width:768px) {
+    .interview-box { width:100vw; max-width:100vw; border-radius:18px 18px 0 0; max-height:96vh; }
+    .interview-overlay { align-items:flex-end; }
+    .interview-sidebar { display:none; }
+    .interview-main { width:100%; border-right:none; border-bottom:1px solid var(--border); max-height:35vh; }
+    .interview-pane { min-height:0; }
+    .interview-pane-content { padding:16px; }
+    .interview-pane-q { font-size:16px; }
+  }
 
   /* ── CERT COUNTDOWN ── */
   .countdown-widget { background:var(--surface2); border-radius:12px; padding:14px; border:1px solid rgba(255,138,101,0.2); }
@@ -2509,7 +2552,90 @@ function openRoadmapEdit() {
     </div>`).join('');
   document.getElementById('roadmapEditModal').classList.add('open');
 }
-function saveRoadmap() {
+// ===== INTERVIEW READING PANE =====
+window._activePaneId = null;
+
+const INTERVIEW_TIPS = {
+  strategic: ['Tie security strategy to business outcomes and revenue protection','Reference your experience building security roadmaps','Mention frameworks: NIST CSF, ISO 27001, COBIT','Quantify risk reduction in business terms'],
+  technical: ['Demonstrate hands-on knowledge without getting lost in jargon','Reference current threat landscape and how you stay current','Show awareness of cloud, zero trust, and emerging threats','Balance technical depth with strategic perspective'],
+  behavioral: ['Use STAR format: Situation, Task, Action, Result','Choose examples with measurable impact','Show how you build consensus and influence without authority','Demonstrate resilience and learning from failures'],
+  board: ['Lead with risk and business impact, not technical details','Use analogies the board will understand','Show financial acumen — budgets, ROI, risk appetite','Practice concise, confident delivery under pressure'],
+  risk: ['Show your risk quantification methodology','Demonstrate how you prioritize limited resources','Reference regulatory frameworks relevant to the org','Explain how you communicate residual risk to leadership'],
+};
+
+function openInterviewPane(qid) {
+  window._activePaneId = qid;
+  const q = QUESTIONS.find(x => x.id === qid);
+  if(!q) return;
+
+  // Update active card highlight in list
+  document.querySelectorAll('.interview-q-card').forEach(c => c.classList.remove('active'));
+  event?.currentTarget?.classList.add('active');
+
+  // Show pane content
+  document.getElementById('interviewPaneEmpty').style.display = 'none';
+  document.getElementById('interviewPaneContent').style.display = 'flex';
+  document.getElementById('interviewPaneFooter').style.display = 'flex';
+
+  // Fill question
+  document.getElementById('interviewPaneQ').textContent = q.q;
+
+  // Level badge
+  const levelEl = document.getElementById('interviewPaneLevel');
+  levelEl.textContent = q.level.toUpperCase();
+  levelEl.className = `interview-q-level ${q.level}`;
+
+  // Stars
+  document.getElementById('interviewPaneStars').innerHTML =
+    [1,2,3,4,5].map(s =>
+      `<button class="interview-pane-star ${q.confidence>=s?'lit':''}" onclick="setPaneConfidence(${q.id},${s})">★</button>`
+    ).join('');
+
+  // Notes
+  document.getElementById('interviewPaneNotes').value = q.notes || '';
+
+  // Tips
+  const tips = INTERVIEW_TIPS[q.level] || INTERVIEW_TIPS.strategic;
+  document.getElementById('interviewPaneTips').innerHTML =
+    tips.map(t => `<div class="interview-pane-tip">${t}</div>`).join('');
+
+  // Counter
+  const allQ = QUESTIONS.filter(x => window._currentCatFilter === 'all' || x.level === window._currentCatFilter);
+  const idx = allQ.findIndex(x => x.id === qid);
+  document.getElementById('interviewPaneCounter').textContent =
+    `Question ${idx+1} of ${allQ.length}`;
+}
+
+function setPaneConfidence(qid, score) {
+  setConfidence(qid, score);
+  // Update stars in pane
+  document.querySelectorAll('.interview-pane-star').forEach((s,i) => {
+    s.classList.toggle('lit', i < score);
+  });
+}
+
+function saveInterviewPaneNotes() {
+  if(!window._activePaneId) return;
+  const notes = document.getElementById('interviewPaneNotes').value;
+  saveQNotes(window._activePaneId, notes);
+  showToast('Notes saved','success');
+  // Refresh list to show updated stars
+  filterInterviewCat(window._currentCatFilter || 'all', null);
+}
+
+function interviewPaneNav(dir) {
+  const cat = window._currentCatFilter || 'all';
+  const allQ = QUESTIONS.filter(x => cat === 'all' || x.level === cat);
+  const idx = allQ.findIndex(x => x.id === window._activePaneId);
+  const nextIdx = idx + dir;
+  if(nextIdx >= 0 && nextIdx < allQ.length) {
+    openInterviewPane(allQ[nextIdx].id);
+  }
+}
+
+window._currentCatFilter = 'all';
+
+
   ROADMAP_EDITABLE.forEach((p,i) => {
     p.name = document.getElementById('rname_'+i).value;
     p.time = document.getElementById('rtime_'+i).value;
@@ -3042,11 +3168,12 @@ init();
     <div class="interview-head">
       <div>
         <div class="interview-title">// CISO INTERVIEW PREP</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px">Rate your confidence · Add practice notes · Track readiness</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px">Click any question to open the reading pane · Rate confidence · Track readiness</div>
       </div>
       <button class="interview-close" onclick="document.getElementById('interviewOverlay').classList.remove('open')">✕ Close</button>
     </div>
     <div class="interview-body">
+      <!-- Left: Category sidebar -->
       <div class="interview-sidebar">
         <div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:10px">CATEGORIES</div>
         <button class="interview-cat-btn active" onclick="filterInterviewCat('all',this)">🗂 ALL QUESTIONS</button>
@@ -3061,9 +3188,45 @@ init();
           <div style="font-family:var(--mono);font-size:10px;color:var(--muted)" id="interviewReadinessLabel">0% Ready</div>
         </div>
       </div>
+      <!-- Center: Question list -->
       <div class="interview-main">
         <div class="interview-stats-row" id="interviewStatsRow"></div>
         <div id="interviewQuestions"></div>
+      </div>
+      <!-- Right: Reading pane -->
+      <div class="interview-pane" id="interviewPane">
+        <div class="interview-pane-empty" id="interviewPaneEmpty">
+          <div class="interview-pane-empty-icon">👈</div>
+          <div class="interview-pane-empty-text">SELECT A QUESTION</div>
+        </div>
+        <div class="interview-pane-content" id="interviewPaneContent" style="display:none">
+          <div class="interview-pane-header">
+            <div class="interview-pane-q" id="interviewPaneQ"></div>
+            <div class="interview-pane-nav">
+              <button class="interview-pane-nav-btn" onclick="interviewPaneNav(-1)">← Prev</button>
+              <button class="interview-pane-nav-btn" onclick="interviewPaneNav(1)">Next →</button>
+            </div>
+          </div>
+          <div class="interview-pane-meta">
+            <span class="interview-q-level" id="interviewPaneLevel"></span>
+            <div class="interview-pane-confidence">
+              <span class="interview-pane-conf-label">CONFIDENCE:</span>
+              <div id="interviewPaneStars"></div>
+            </div>
+          </div>
+          <div>
+            <div class="interview-pane-section-label">// PRACTICE NOTES</div>
+            <textarea class="interview-pane-notes" id="interviewPaneNotes" rows="7" placeholder="Write your answer framework here...&#10;&#10;• Key talking points&#10;• Real examples from your experience&#10;• Metrics or outcomes to mention&#10;• Frameworks to reference (NIST, ISO, etc.)"></textarea>
+          </div>
+          <div>
+            <div class="interview-pane-section-label">// SUGGESTED TALKING POINTS</div>
+            <div class="interview-pane-tips" id="interviewPaneTips"></div>
+          </div>
+        </div>
+        <div class="interview-pane-footer" id="interviewPaneFooter" style="display:none">
+          <div class="interview-pane-counter" id="interviewPaneCounter"></div>
+          <button class="interview-pane-save-btn" onclick="saveInterviewPaneNotes()">SAVE NOTES →</button>
+        </div>
       </div>
     </div>
   </div>
@@ -3245,22 +3408,22 @@ function openInterview(){
 }
 function filterInterviewCat(cat,btn){
   currentInterviewCat=cat;
+  window._currentCatFilter=cat;
   document.querySelectorAll('.interview-cat-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');renderInterviewQuestions();
+  if(btn) btn.classList.add('active');
+  renderInterviewQuestions();
 }
 function renderInterviewQuestions(){
   const filtered=currentInterviewCat==='all'?interviewData:interviewData.filter(q=>q.cat===currentInterviewCat);
   document.getElementById('interviewQuestions').innerHTML=filtered.map((q,idx)=>`
-    <div class="interview-q-card" style="animation-delay:${idx*0.04}s">
+    <div class="interview-q-card ${window._activePaneId===q.id?'active':''}" style="animation-delay:${idx*0.04}s" onclick="openInterviewPane(${q.id})">
       <div class="interview-q-meta">
         <span class="interview-q-level ${q.level}">${q.level.toUpperCase()}</span>
-        <div class="interview-confidence">
-          <span class="interview-conf-label">CONFIDENCE:</span>
-          ${[1,2,3,4,5].map(s=>`<button class="conf-star ${q.confidence>=s?'lit':''}" onclick="setConfidence(${q.id},${s})">★</button>`).join('')}
-        </div>
       </div>
       <div class="interview-q-text">${q.q}</div>
-      <textarea class="interview-notes-area" rows="2" placeholder="Practice notes, key talking points, examples to use..." onchange="saveQNotes(${q.id},this.value)">${q.notes||''}</textarea>
+      <div class="interview-q-mini-stars">
+        ${[1,2,3,4,5].map(s=>`<span class="interview-q-mini-star ${q.confidence>=s?'lit':''}">★</span>`).join('')}
+      </div>
     </div>`).join('');
   updateInterviewStats();
 }
