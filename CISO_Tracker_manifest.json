@@ -2,7 +2,7 @@
   "name": "CISO Career Tracker",
   "short_name": "CISO Tracker",
   "description": "KAIZEN habit tracker for aspiring CISOs — daily habits, goals, interview prep, and career roadmap.",
-  "start_url": "/ciso-career-tracker/CISO_Tracker_kaizen_v05.html",
+  "start_url": "/ciso-career-tracker/CISO_Tracker_kaizen_v07.html",
   "scope": "/ciso-career-tracker/",
   "display": "standalone",
   "background_color": "#0a0c10",
