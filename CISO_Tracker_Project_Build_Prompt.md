@@ -1,13 +1,13 @@
 # 🛡️ CISO Career Tracker — Project Build Prompt
 ### Project-specific rules — use alongside Claude_Universal_Build_Rules.md
-### Current Version: KAIZEN v07.0 · Last Updated: March 17, 2026
+### Current Version: KAIZEN v08.0 · Last Updated: March 17, 2026
 
 ---
 
 > **How to use:** Paste BOTH this file AND `Claude_Universal_Build_Rules.md` at the start of any new Claude conversation. Start your message with:
 > ```
 > Continue development of the CISO Career Tracker using the rules below.
-> Current version is KAIZEN v07.0.
+> Current version is KAIZEN v08.0.
 > ```
 
 ---
@@ -20,8 +20,8 @@
 - **Storage:** Browser localStorage — all keys use `_v30` suffix (never change)
 - **License:** CC BY-NC 4.0 — Copyright © 2026 Corvus-One (Brihan)
 - **Repo:** `github.com/Corvus-One/ciso-career-tracker`
-- **Live URL:** `https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v07.html`
-- **Current Version:** KAIZEN v07.0
+- **Live URL:** `https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v08.html`
+- **Current Version:** KAIZEN v08.0
 
 ---
 
@@ -30,7 +30,7 @@
 Always prefix every file with `CISO_Tracker_`:
 
 ```
-CISO_Tracker_kaizen_v07.html        ← main app
+CISO_Tracker_kaizen_v08.html        ← main app
 CISO_Tracker_manifest.json          ← PWA manifest
 CISO_Tracker_service-worker.js      ← offline cache
 CISO_Tracker_Master_Build_Prompt.md ← this file
@@ -39,7 +39,7 @@ LICENSE                             ← CC BY-NC 4.0
 ```
 
 After every delivery post:
-`https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v07.html`
+`https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v08.html`
 
 ---
 
@@ -218,7 +218,7 @@ When bumping from v06.0 to the next version, update ALL of these:
 **manifest.json key values:**
 ```json
 {
-  "start_url": "/ciso-career-tracker/CISO_Tracker_kaizen_v07.html",
+  "start_url": "/ciso-career-tracker/CISO_Tracker_kaizen_v08.html",
   "scope": "/ciso-career-tracker/",
   "display": "standalone",
   "background_color": "#0a0c10",
@@ -227,7 +227,7 @@ When bumping from v06.0 to the next version, update ALL of these:
 ```
 
 **Service worker:**
-- Cache name: `ciso-tracker-v07`
+- Cache name: `ciso-tracker-v08`
 - Base path: `/ciso-career-tracker/`
 - Skips: `claudeusercontent.com`, non-GET requests, OpenRouter API calls
 - Strategy: Cache-first with background network update
@@ -259,11 +259,11 @@ When bumping from v06.0 to the next version, update ALL of these:
 ## SECTION 11 — Quick Reference
 
 ```
-Current version:      KAIZEN v07.0
+Current version:      KAIZEN v08.0
 Storage key suffix:   _v30 (never change)
 Repo:                 github.com/Corvus-One/ciso-career-tracker
 Live URL:             https://corvus-one.github.io/ciso-career-tracker/
-                      CISO_Tracker_kaizen_v07.html
+                      CISO_Tracker_kaizen_v08.html
 License:              CC BY-NC 4.0
 Copyright:            © 2026 Corvus-One (Brihan)
 File prefix:          CISO_Tracker_
