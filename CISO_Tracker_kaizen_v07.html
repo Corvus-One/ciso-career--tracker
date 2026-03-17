@@ -46,6 +46,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.7/tippy.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.7/tippy.min.css">
@@ -324,6 +325,12 @@
   /* HABIT LIST */
   .habit-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
   .habit-row:last-child { border-bottom:none; }
+  .habit-drag-handle { cursor:grab; color:var(--border); display:flex; align-items:center; flex-shrink:0; padding:2px; transition:color 0.2s; touch-action:none; }
+  .habit-drag-handle:hover { color:var(--muted); }
+  .habit-drag-handle:active { cursor:grabbing; }
+  .habit-drag-handle svg { width:14px; height:14px; stroke:currentColor; stroke-width:2; fill:none; }
+  .habit-row.sortable-ghost { opacity:0.4; background:var(--surface2); border-radius:8px; }
+  .habit-row.sortable-chosen { background:var(--surface2); border-radius:8px; }
   .habit-link-btn { background:transparent; border:none; cursor:pointer; color:var(--muted); padding:2px 4px; border-radius:4px; transition:all 0.2s; flex-shrink:0; display:flex; align-items:center; }
   .habit-link-btn:hover { color:var(--accent2); background:rgba(79,195,247,0.1); }
   .habit-link-btn svg { width:13px; height:13px; stroke:currentColor; stroke-width:2; fill:none; }
@@ -3129,7 +3136,10 @@ function renderRoadmap(){
 function renderHabits(){
   const key=dateKey(new Date()); if(!habitChecks[key]) habitChecks[key]={};
   document.getElementById('habitList').innerHTML=HABITS.map(h=>`
-    <div class="habit-row">
+    <div class="habit-row" data-id="${h.id}">
+      <div class="habit-drag-handle" title="Drag to reorder">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.5" fill="currentColor"/><circle cx="15" cy="6" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="18" r="1.5" fill="currentColor"/><circle cx="15" cy="18" r="1.5" fill="currentColor"/></svg>
+      </div>
       <span class="habit-cat-tag" style="background:${h.color}22;color:${h.color}">${h.cat}</span>
       <span class="habit-name" style="flex:1">${h.name}</span>
       ${h.url ? `<button class="habit-link-btn" onclick="openHabitResource(${h.id})" title="Open resource: ${h.url}">
@@ -3138,6 +3148,31 @@ function renderHabits(){
       <div class="habit-check ${habitChecks[key][h.id]?'checked':''}" onclick="toggleHabit(${h.id})">${habitChecks[key][h.id]?'✓':''}</div>
     </div>`).join('');
   updateStats();
+  initHabitSort();
+}
+
+function initHabitSort() {
+  if(typeof Sortable === 'undefined') return;
+  const el = document.getElementById('habitList');
+  if(!el) return;
+  // Destroy existing instance
+  if(window._habitSortable) window._habitSortable.destroy();
+  window._habitSortable = new Sortable(el, {
+    handle: '.habit-drag-handle',
+    animation: 150,
+    ghostClass: 'sortable-ghost',
+    chosenClass: 'sortable-chosen',
+    dragClass: 'sortable-drag',
+    onEnd: function(evt) {
+      // Reorder HABITS array to match new DOM order
+      const newOrder = [...el.querySelectorAll('.habit-row')]
+        .map(row => parseInt(row.dataset.id));
+      HABITS.sort((a,b) => newOrder.indexOf(a.id) - newOrder.indexOf(b.id));
+      save();
+      // Re-render weekly to reflect new order
+      renderWeekly();
+    }
+  });
 }
 
 function openHabitResource(id) {
