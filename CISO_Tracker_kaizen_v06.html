@@ -506,6 +506,16 @@
   .save-log-btn { width:100%; padding:12px; border-radius:9px; background:var(--accent); border:none; color:white; font-family:var(--mono); font-size:12px; letter-spacing:2px; cursor:pointer; transition:all 0.2s; }
   .save-log-btn:hover { background:#6b5de0; }
 
+  /* ── CHECK-IN SCORE ── */
+  .checkin-score-row { display:flex; gap:6px; margin-bottom:16px; }
+  .checkin-score-btn { flex:1; padding:8px 4px; border-radius:8px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-family:var(--mono); font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s; }
+  .checkin-score-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .checkin-score-btn.selected { color:white; border-color:transparent; }
+  .checkin-score-btn.score-low { background:#cf222e; }
+  .checkin-score-btn.score-mid { background:#c49a00; }
+  .checkin-score-btn.score-high { background:#1a7a3c; }
+  .checkin-trend-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:18px; }
+
   /* ADD GOAL FORM */
   .add-goal-form { display:flex; gap:8px; flex-wrap:wrap; padding:12px; background:rgba(124,106,247,0.04); border:1px dashed rgba(124,106,247,0.2); border-radius:10px; margin-bottom:14px; }
 
@@ -711,6 +721,15 @@
     @keyframes qCardIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
     .interview-q-card { animation:qCardIn 0.25s ease both; }
   }
+
+  /* ── CHECK-IN SCORE ── */
+  .checkin-score-row { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .score-btn { flex:1; min-width:32px; padding:8px 4px; border-radius:8px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-family:var(--mono); font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s; text-align:center; }
+  .score-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .score-btn.selected-1,.score-btn.selected-2,.score-btn.selected-3 { background:var(--red-soft); border-color:var(--red); color:var(--red); }
+  .score-btn.selected-4,.score-btn.selected-5,.score-btn.selected-6 { background:var(--yellow-soft); border-color:var(--yellow); color:var(--yellow); }
+  .score-btn.selected-7,.score-btn.selected-8 { background:rgba(124,106,247,0.12); border-color:var(--accent); color:var(--accent); }
+  .score-btn.selected-9,.score-btn.selected-10 { background:var(--green-soft); border-color:var(--green); color:var(--green); }
 
   /* ── ONBOARDING TOUR ── */
   .tour-overlay { display:none; position:fixed; top:0; right:0; bottom:0; left:0; z-index:800; pointer-events:none; }
@@ -1336,12 +1355,23 @@
         </div>
       </div>
 
+      <!-- CHECK-IN TREND CHART -->
+      <div class="card" id="checkinTrendCard" style="display:none">
+        <div class="card-header">
+          <div class="card-title">30-Day Check-In Trend</div>
+          <div class="card-badge" id="checkinAvgBadge">AVG —</div>
+        </div>
+        <div style="position:relative;height:120px">
+          <canvas id="checkinTrendChart"></canvas>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header">
           <div class="card-title">Today's Habits</div>
           <div style="display:flex;gap:8px;">
             <button class="btn-sm" onclick="toggleAddHabit()" id="toggleHabitBtn"><span class="icon"><i data-lucide="plus"></i></span> Add Habit</button>
-            <button class="btn-sm" onclick="document.getElementById('modalOverlay').classList.add('open')"><span class="icon"><i data-lucide="clipboard"></i></span> Log Day</button>
+            <button class="btn-sm" onclick="document.getElementById('modalOverlay').classList.add('open');loadTodayScore()"><span class="icon"><i data-lucide="clipboard"></i></span> Log Day</button>
           </div>
         </div>
         <div id="addHabitForm" style="display:none">
@@ -1626,6 +1656,24 @@
     </div>
     <div class="fl" style="margin-bottom:8px">BIGGEST WIN TODAY</div>
     <input class="fi" id="dayWin" placeholder="One thing that moved the needle..." style="width:100%;margin-bottom:14px">
+    <div class="fl" style="margin-bottom:8px">TODAY'S CHECK-IN SCORE</div>
+    <div class="checkin-score-row" id="checkinScoreRow">
+      <button class="checkin-score-btn" onclick="selectScore(this,1)">1</button>
+      <button class="checkin-score-btn" onclick="selectScore(this,2)">2</button>
+      <button class="checkin-score-btn" onclick="selectScore(this,3)">3</button>
+      <button class="checkin-score-btn" onclick="selectScore(this,4)">4</button>
+      <button class="checkin-score-btn" onclick="selectScore(this,5)">5</button>
+      <button class="checkin-score-btn" onclick="selectScore(this,6)">6</button>
+      <button class="checkin-score-btn" onclick="selectScore(this,7)">7</button>
+      <button class="checkin-score-btn" onclick="selectScore(this,8)">8</button>
+      <button class="checkin-score-btn" onclick="selectScore(this,9)">9</button>
+      <button class="checkin-score-btn" onclick="selectScore(this,10)">10</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:14px">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">ROUGH DAY</span>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--accent)" id="checkinScoreVal">— / 10</span>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">CRUSHING IT</span>
+    </div>
     <div class="fl" style="margin-bottom:8px">NOTES / BRAIN DUMP</div>
     <textarea class="notes-area" id="dayNotes" placeholder="Thoughts, blockers, ideas..." rows="3" style="margin-bottom:16px"></textarea>
     <button class="save-log-btn" onclick="saveLog()">SAVE TODAY'S LOG →</button>
@@ -1776,7 +1824,122 @@ function initKeyboardNav() {
   document.body.appendChild(liveRegion);
 }
 
-// ===== ONBOARDING TOUR =====
+// ===== CHECK-IN SCORE SYSTEM =====
+let checkinScores = {}; // { 'YYYY-MM-DD': score }
+let selectedScore = null;
+
+function loadCheckinScores() {
+  try { const s = localStorage.getItem('checkin_scores_v30'); if(s) checkinScores = JSON.parse(s); } catch(e){}
+}
+function saveCheckinScores() {
+  try { localStorage.setItem('checkin_scores_v30', JSON.stringify(checkinScores)); } catch(e){}
+}
+
+function selectScore(btn, score) {
+  selectedScore = score;
+  // Update all buttons
+  document.querySelectorAll('.checkin-score-btn').forEach((b, i) => {
+    const s = i + 1;
+    b.classList.remove('selected', 'score-low', 'score-mid', 'score-high');
+    if(s <= score) {
+      b.classList.add('selected');
+      b.classList.add(score <= 3 ? 'score-low' : score <= 6 ? 'score-mid' : 'score-high');
+    }
+  });
+  // Update label
+  const labels = ['','Rough day 😔','Tough going 😕','Below average 😐','Getting there 🙂','Decent day 👍','Good day ✓','Pretty good! 😊','Great day 🌟','Excellent! 💪','Crushing it! 🚀'];
+  document.getElementById('checkinScoreVal').textContent = `${score} / 10 — ${labels[score]}`;
+}
+
+function loadTodayScore() {
+  const todayKey = dateKey(new Date());
+  const score = checkinScores[todayKey];
+  if(score) selectScore(null, score);
+  else {
+    selectedScore = null;
+    document.querySelectorAll('.checkin-score-btn').forEach(b => b.classList.remove('selected','score-low','score-mid','score-high'));
+    document.getElementById('checkinScoreVal').textContent = '— / 10';
+  }
+}
+
+function renderCheckinChart() {
+  const today = new Date();
+  const labels = [], data = [], colors = [];
+  let hasData = false;
+
+  for(let i = 29; i >= 0; i--) {
+    const d = new Date(today); d.setDate(d.getDate() - i);
+    const key = dateKey(d);
+    const score = checkinScores[key] || null;
+    labels.push(i === 0 ? 'Today' : i % 7 === 0 ? `${Math.floor(i/7)}w` : '');
+    data.push(score);
+    if(score) hasData = true;
+    colors.push(score ? (score <= 3 ? '#cf222e' : score <= 6 ? '#c49a00' : '#1a7a3c') : 'transparent');
+  }
+
+  const card = document.getElementById('checkinTrendCard');
+  if(!hasData) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  // Update average badge
+  const scored = Object.values(checkinScores).filter(Boolean);
+  const avg = scored.length ? (scored.reduce((a,b)=>a+b,0)/scored.length).toFixed(1) : '—';
+  document.getElementById('checkinAvgBadge').textContent = `AVG ${avg} / 10`;
+
+  const ctx = document.getElementById('checkinTrendChart');
+  if(!ctx) return;
+  if(window._checkinChart) window._checkinChart.destroy();
+
+  const isDark = !document.body.classList.contains('light');
+  const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+  const textColor = isDark ? '#5a6480' : '#888';
+
+  window._checkinChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+        borderRadius: 3,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: isDark ? '#1a1e28' : '#fff',
+          titleColor: isDark ? '#e2e8f0' : '#1a1e2e',
+          bodyColor: isDark ? '#e2e8f0' : '#1a1e2e',
+          borderColor: isDark ? '#272d3d' : '#d0d5e8',
+          borderWidth: 1,
+          callbacks: {
+            title: (items) => {
+              const idx = items[0].dataIndex;
+              const d = new Date(today); d.setDate(d.getDate() - (29 - idx));
+              return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+            },
+            label: ctx => ctx.raw ? ` Score: ${ctx.raw} / 10` : ' No score logged'
+          }
+        }
+      },
+      scales: {
+        x: { grid:{display:false}, ticks:{color:textColor,font:{family:'Space Mono',size:9}} },
+        y: {
+          min:0, max:10,
+          grid:{color:gridColor},
+          ticks:{color:textColor,font:{family:'Space Mono',size:9},maxTicksLimit:5,callback:v=>v||''}
+        }
+      },
+      animation: { duration: 500, easing:'easeOutQuart' }
+    }
+  });
+}
+
+
 const TOUR_STEPS = [
   {
     emoji: '🛡️',
@@ -2320,6 +2483,7 @@ function loadFromStorage() {
     const hb=localStorage.getItem('hb_v30'); if(hb) HABITS=JSON.parse(hb);
     const qn=localStorage.getItem('qn_v30'); if(qn) document.getElementById('quickNote').value=qn;
     document.getElementById('quickNote').addEventListener('input',function(){localStorage.setItem('qn_v30',this.value);});
+    loadCheckinScores();
   } catch(e){}
 }
 function save() {
@@ -2334,7 +2498,7 @@ function save() {
 function renderAll() {
   renderCalendar(); renderHabits(); renderPriorities(); renderRoadmap();
   renderWeekly(); renderGoals(); renderHeatmap(); renderQuarterly(); renderIdeas();
-  renderJournal(); updateStats();
+  renderJournal(); updateStats(); renderCheckinChart();
   initIcons();
   setTimeout(initTooltips, 200);
 }
@@ -2691,6 +2855,13 @@ function renderQuarterly(){
 function selectMood(btn){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
 function saveLog(){
   document.getElementById('modalOverlay').classList.remove('open');
+  // Save check-in score if selected
+  if(selectedScore !== null) {
+    const todayKey = dateKey(new Date());
+    checkinScores[todayKey] = selectedScore;
+    saveCheckinScores();
+    renderCheckinChart();
+  }
   streak++;
   document.getElementById('streakNum').textContent=streak;
   renderHeatmap();renderQuarterly();
