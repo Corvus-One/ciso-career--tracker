@@ -1010,8 +1010,8 @@
 
     .ai-messages { height:200px; }
 
-    .ideas-tabs { flex-wrap:wrap; gap:4px; }
-    .idea-tab { font-size:13px; padding:6px 10px; }
+    .ideas-tabs { flex-wrap:nowrap; gap:4px; }
+    .idea-tab { font-size:13px; padding:8px 6px; flex:1; text-align:center; }
 
     .modal { width:100vw; max-width:100vw; border-radius:18px 18px 0 0; position:fixed; bottom:0; max-height:90vh; }
     .modal-overlay { align-items:flex-end; }
@@ -1073,6 +1073,102 @@
     .badges-grid { grid-template-columns:repeat(auto-fill,minmax(64px,1fr)); gap:8px; }
     .badge-icon { font-size:22px; }
     .habit-check { width:38px; height:38px; }
+  }
+
+  /* ── VIEW-SPECIFIC RESPONSIVE STYLES ── */
+
+  /* DAILY VIEW */
+  @media (max-width:768px) {
+    /* Stats row already 2-col — ensure proper sizing */
+    .stat-card { min-width:0; }
+    .stat-num { font-size:22px; }
+    .stat-sub { font-size:13px; }
+
+    /* Check-in trend chart */
+    #checkinTrendCard { margin-bottom:12px; }
+
+    /* Habit rows */
+    .habit-drag-handle { opacity:0.5; }
+    .habit-cat-tag { font-size:13px; padding:2px 6px; }
+    .habit-link-btn svg { width:15px; height:15px; }
+    .habit-check { width:36px; height:36px; flex-shrink:0; }
+
+    /* Journal */
+    .journal-section { margin-top:16px; }
+    .journal-entry { padding:10px 12px; }
+
+    /* Add habit form — full width inputs */
+    .add-habit-form .fg { width:100%; }
+    .add-habit-form .btn-add { width:100%; }
+  }
+
+  /* WEEKLY VIEW */
+  @media (max-width:768px) {
+    /* Weekly grid — scrollable horizontally */
+    #weeklyGrid { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .wk-row { min-width:480px; }
+    .wk-name { font-size:13px; min-width:100px; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .wk-check { width:28px; height:28px; font-size:13px; flex-shrink:0; }
+    .wk-rate { font-size:13px; }
+
+    /* Charts already stack to 1-col */
+    .charts-grid canvas { max-height:160px; }
+  }
+
+  /* MONTHLY VIEW */
+  @media (max-width:768px) {
+    /* Goals list */
+    .goal-item { padding:10px 12px; }
+    .goal-text { font-size:13px; }
+    .goal-meta { flex-wrap:wrap; gap:4px; }
+
+    /* Heatmap — scrollable */
+    .heatmap-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:6px; }
+    .heatmap { min-width:360px; }
+
+    /* Add goal form */
+    .add-goal-form { flex-direction:column; }
+    .add-goal-form .fg { width:100%; }
+    .add-goal-form .btn-add { width:100%; }
+
+    /* Reflection notes */
+    .notes-area { font-size:14px; }
+  }
+
+  /* QUARTERLY VIEW */
+  @media (max-width:768px) {
+    /* Q mini calendars already stack to 1-col */
+    .q-cell { font-size:13px; }
+
+    /* Year heatmap — scrollable */
+    .year-heatmap-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:6px; }
+    #yearHeatmap { min-width:420px; }
+  }
+
+  /* IDEAS VIEW */
+  @media (max-width:768px) {
+    /* Tab buttons */
+    .ideas-tabs { gap:4px; }
+    .idea-tab { font-size:13px; padding:7px 12px; flex:1; text-align:center; }
+
+    /* Idea items */
+    .idea-item { flex-wrap:wrap; gap:6px; padding:10px; }
+    .idea-text { font-size:13px; width:100%; }
+    .idea-actions { width:100%; justify-content:flex-end; margin-top:4px; }
+    .idea-action-btn { font-size:13px; padding:4px 10px; }
+    .idea-input { font-size:14px; }
+
+    /* Completed section */
+    #completedIdeasSection { margin-top:16px; }
+  }
+
+  /* TABLET — all views */
+  @media (min-width:769px) and (max-width:1024px) {
+    .stats-row { grid-template-columns:repeat(4,1fr); gap:10px; }
+    .charts-grid { grid-template-columns:1fr 1fr; }
+    .quarter-grid { grid-template-columns:repeat(3,1fr); }
+    .wk-name { max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .idea-tab { font-size:13px; }
   }
 
   /* ── PRINT / PDF EXPORT STYLES ── */
@@ -1588,7 +1684,7 @@
           <div style="width:42px;text-align:right;font-family:var(--mono);font-size:13px;color:var(--muted)">RATE</div>
           <div style="width:28px"></div>
         </div>
-        <div id="weeklyGrid"></div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div id="weeklyGrid"></div></div>
       </div>
       <div class="charts-grid">
         <div class="card">
@@ -1626,7 +1722,7 @@
       </div>
       <div class="card">
         <div class="card-header"><div class="card-title">Activity Heatmap</div><div class="card-badge">LAST 3 MONTHS</div></div>
-        <div class="heatmap" id="heatmap"></div>
+        <div class="heatmap-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px"><div class="heatmap" id="heatmap"></div></div>
         <div style="display:flex;align-items:center;gap:5px;margin-top:10px;">
           <span style="font-family:var(--mono);font-size:13px;color:var(--muted)">LESS</span>
           <div class="heat-cell heat-0" style="width:13px;height:13px"></div>
@@ -1661,7 +1757,7 @@
       </div>
       <div class="card">
         <div class="card-header"><div class="card-title">Year Heatmap</div></div>
-        <div class="heatmap" id="yearHeatmap"></div>
+        <div class="year-heatmap-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px"><div class="heatmap" id="yearHeatmap"></div></div>
       </div>
     </div>
 
