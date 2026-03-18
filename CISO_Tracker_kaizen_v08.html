@@ -16,7 +16,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
 <meta name="apple-touch-fullscreen" content="yes">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230a0c10'/><text x='90' y='125' font-size='90' text-anchor='middle'>🛡️</text></svg>">
 <title>CISO Career Tracker · Kaizen v08.0</title>
@@ -180,7 +180,7 @@
     padding:14px 28px; border-bottom:1px solid var(--border);
     background:var(--header-bg); backdrop-filter:blur(16px);
     position:sticky; top:0; z-index:100;
-    flex-wrap:wrap; overflow:visible;
+    flex-wrap:nowrap; overflow:visible; min-height:0;
   }
   /* Header rows — logo+nav on top, features below on mid screens */
   .header-row-1 { display:flex; align-items:center; gap:10px; width:100%; flex-wrap:nowrap; }
@@ -190,10 +190,11 @@
   .nav-pills { display:flex; gap:6px; flex-shrink:0; }
   .feature-pills { display:flex; gap:6px; flex-wrap:nowrap; flex-shrink:0; }
   .feature-btn { font-size:13px !important; padding:6px 10px !important; white-space:nowrap; }
-  @media(max-width:960px) { .feature-pills { display:none !important; } }
+  .feature-pills.hidden { display:none !important; }
+  @media(max-width:1100px) { .feature-pills { display:none !important; } }
   /* Feature buttons available in sidebar on mobile */
   .mobile-feature-buttons { display:none; padding:12px 16px; border-bottom:1px solid var(--border); }
-  @media(max-width:960px) { .mobile-feature-buttons { display:flex; flex-wrap:wrap; gap:6px; } }
+  @media(max-width:1200px) { .mobile-feature-buttons { display:flex; flex-wrap:wrap; gap:6px; } }
   .nav-btn { padding:7px 15px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--muted); font-family:var(--mono); font-size:13px; cursor:pointer; transition:all 0.2s; letter-spacing:1px; -webkit-tap-highlight-color:transparent; }
   .nav-btn:hover,.nav-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
   /* Fix touch active state on Android — only apply active to explicitly active nav items */
@@ -1051,9 +1052,9 @@
     .tour-card { width:min(300px, calc(100vw - 32px)); }
   }
 
-  /* ── TABLET (769px–1024px) ── */
-  @media (min-width:769px) and (max-width:1024px) {
-    .header { padding:12px 20px; gap:8px; }
+  /* ── TABLET (769px–1200px) ── */
+  @media (min-width:769px) and (max-width:1200px) {
+    .header { padding:12px 20px; gap:8px; overflow:visible; }
     .feature-pills { display:none !important; }
     .nav-pills .nav-btn { padding:6px 12px; font-size:13px; }
     .content { padding:18px 20px; }
@@ -1943,7 +1944,7 @@ function initKeyboardNav() {
       });
       // Close sidebar on mobile
       const sidebar = document.querySelector('.sidebar');
-      if(sidebar.classList.contains('open')) toggleSidebar();
+      if(sidebar.classList.contains('open')) closeSidebarIfMobile();
     }
     // Arrow keys cycle through views when focused on nav
     if(e.target.closest('.nav-pills')) {
@@ -2417,12 +2418,77 @@ function checkTour() {
 }
 
 
+// ===== RESPONSIVE LAYOUT MANAGER =====
+function initResponsive() {
+  const featurePills = document.querySelector('.feature-pills');
+  const sidebarDrawerBtn = document.querySelector('.sidebar-drawer-btn');
+  const navPills = document.querySelector('.nav-pills');
+  const mobileBottomNav = document.querySelector('.mobile-bottom-nav');
+
+  function updateLayout() {
+    const w = window.innerWidth;
+    const isMobile = w <= 768;
+    const isTablet = w > 768 && w <= 1100;
+    const isDesktop = w > 1100;
+
+    // Feature pills — only show on wide desktop
+    if(featurePills) {
+      featurePills.style.display = isDesktop ? 'flex' : 'none';
+    }
+
+    // Hamburger button — show on mobile + tablet
+    if(sidebarDrawerBtn) {
+      sidebarDrawerBtn.style.display = (isMobile || isTablet) ? 'flex' : 'none';
+    }
+
+    // Nav pills — hide on mobile only
+    if(navPills) {
+      navPills.style.display = isMobile ? 'none' : 'flex';
+    }
+
+    // Mobile bottom nav — show on mobile only
+    if(mobileBottomNav) {
+      mobileBottomNav.style.display = isMobile ? 'block' : 'none';
+    }
+
+    // If resized to desktop — reset sidebar to normal flow position
+    if(isDesktop) {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if(sidebar) {
+        sidebar.classList.remove('open');
+        sidebar.style.left = '';
+      }
+      if(overlay) overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+  }
+
+  // Run on load and on resize
+  updateLayout();
+  window.addEventListener('resize', updateLayout);
+  // Also run after a short delay to catch late rendering
+  setTimeout(updateLayout, 300);
+}
+
 // ===== FIX ANDROID TOUCH ACTIVE STATE =====
 function initTouchFix() {
   document.querySelectorAll('.feature-btn').forEach(btn => {
     btn.addEventListener('touchstart', () => {}, {passive:true});
     btn.addEventListener('touchend', () => { setTimeout(() => btn.blur(), 100); }, {passive:true});
     btn.classList.remove('active');
+  });
+  // Belt-and-suspenders: hide feature pills on mobile via JS too
+  if(window.innerWidth <= 1200) {
+    const fp = document.querySelector('.feature-pills');
+    if(fp) fp.style.display = 'none';
+  }
+  // Re-show on resize if desktop
+  window.addEventListener('resize', () => {
+    const fp = document.querySelector('.feature-pills');
+    if(!fp) return;
+    fp.style.display = window.innerWidth > 1200 ? '' : 'none';
   });
 }
 
@@ -3043,6 +3109,7 @@ function init() {
   initQuote();
   initKeyboardNav();
   initTouchFix();
+  initResponsive();
   renderAll();
   checkTour();
 }
@@ -3097,6 +3164,7 @@ function switchView(name,btn){
   document.getElementById('view-'+name).classList.add('active');
   btn.classList.add('active');
   btn.setAttribute('aria-pressed','true');
+  closeSidebarIfMobile();
 }
 function switchIdea(name,btn){document.querySelectorAll('.idea-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.idea-tab').forEach(b=>b.classList.remove('active'));document.getElementById('panel-'+name).classList.add('active');btn.classList.add('active');}
 
@@ -4358,21 +4426,40 @@ function toggleSidebar() {
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.getElementById('sidebarOverlay');
   const isOpen = sidebar.classList.contains('open');
-  sidebar.classList.toggle('open', !isOpen);
-  overlay.classList.toggle('open', !isOpen);
-  document.body.style.overflow = isOpen ? '' : 'hidden';
+
+  if(isOpen) {
+    // Close
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    document.body.style.touchAction = '';
+  } else {
+    // Open
+    sidebar.classList.add('open');
+    overlay.classList.add('open');
+    // Prevent body scroll when sidebar open on mobile
+    if(window.innerWidth <= 1100) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    }
+  }
+}
+
+function closeSidebarIfMobile() {
+  if(window.innerWidth <= 1100) {
+    const sidebar = document.querySelector('.sidebar');
+    if(sidebar.classList.contains('open')) toggleSidebar();
+  }
 }
 
 // ===== MOBILE BOTTOM NAV =====
 function mobileSwitchView(name, btn) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
-  // Only sync view nav-btns, not feature-btns
   document.querySelectorAll('.nav-pills .nav-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const sidebar = document.querySelector('.sidebar');
-  if(sidebar.classList.contains('open')) toggleSidebar();
+  closeSidebarIfMobile();
 }
 
 // ===== iOS INSTALL BANNER =====
