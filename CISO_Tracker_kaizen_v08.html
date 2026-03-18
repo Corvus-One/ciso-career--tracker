@@ -54,16 +54,16 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CISO Tracker">
-<meta name="theme-color" content="#0a0c10">
+<meta name="theme-color" content="#0f1117">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ── DARK THEME (default) ── */
   :root {
-    --bg: #0a0c10;
-    --surface: #12151c;
-    --surface2: #1a1e28;
-    --surface3: #222736;
-    --border: #272d3d;
+    --bg: #0f1117;
+    --surface: #161920;
+    --surface2: #1e2230;
+    --surface3: #252a3a;
+    --border: #2c3245;
     --accent: #7c6af7;
     --accent2: #4fc3f7;
     --accent3: #69f0ae;
@@ -82,7 +82,7 @@
     --base: 16px;
     --sidebar-width: 340px;
     /* Semantic tokens */
-    --header-bg: rgba(18,21,28,0.97);
+    --header-bg: rgba(15,17,23,0.97);
     --overlay-bg: rgba(0,0,0,0.78);
     --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
     --shadow-md: 0 4px 20px rgba(0,0,0,0.35);
@@ -2269,10 +2269,10 @@ function renderCheckinChart() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: isDark ? '#1a1e28' : '#fff',
+          backgroundColor: isDark ? '#1e2230' : '#fff',
           titleColor: isDark ? '#e2e8f0' : '#1a1e2e',
           bodyColor: isDark ? '#e2e8f0' : '#1a1e2e',
-          borderColor: isDark ? '#272d3d' : '#d0d5e8',
+          borderColor: isDark ? '#2c3245' : '#d0d5e8',
           borderWidth: 1,
           callbacks: {
             title: (items) => {
@@ -3422,7 +3422,7 @@ function renderWeekly(){
     const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
     const textColor = isDark ? '#5a6480' : '#888';
     const accentColor = '#7c6af7';
-    const mutedColor = isDark ? '#222736' : '#e8e8f0';
+    const mutedColor = isDark ? '#252a3a' : '#e8e8f0';
     const fakeData = [55,70,48,82,65,78,71,84];
     window._barChart = new Chart(barCtx, {
       type: 'bar',
@@ -3443,10 +3443,10 @@ function renderWeekly(){
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: isDark ? '#1a1e28' : '#fff',
+            backgroundColor: isDark ? '#1e2230' : '#fff',
             titleColor: isDark ? '#e2e8f0' : '#1a1e2e',
             bodyColor: accentColor,
-            borderColor: isDark ? '#272d3d' : '#d0d5e8',
+            borderColor: isDark ? '#2c3245' : '#d0d5e8',
             borderWidth: 1,
             callbacks: { label: ctx => ` ${ctx.raw}% completion` }
           }
@@ -3498,7 +3498,7 @@ function renderWeekly(){
         datasets: [{
           data: values.length ? values : [25,25,25,25],
           backgroundColor: colors.slice(0, values.length || 4),
-          borderColor: isDark ? '#12151c' : '#ffffff',
+          borderColor: isDark ? '#161920' : '#ffffff',
           borderWidth: 3,
           hoverOffset: 6
         }]
@@ -3518,10 +3518,10 @@ function renderWeekly(){
             }
           },
           tooltip: {
-            backgroundColor: isDark ? '#1a1e28' : '#fff',
+            backgroundColor: isDark ? '#1e2230' : '#fff',
             titleColor: isDark ? '#e2e8f0' : '#1a1e2e',
             bodyColor: isDark ? '#e2e8f0' : '#1a1e2e',
-            borderColor: isDark ? '#272d3d' : '#d0d5e8',
+            borderColor: isDark ? '#2c3245' : '#d0d5e8',
             borderWidth: 1,
             callbacks: { label: ctx => ` ${ctx.raw}% this week` }
           }
