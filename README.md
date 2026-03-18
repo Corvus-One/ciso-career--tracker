@@ -1,13 +1,13 @@
 # 🛡️ CISO Career Tracker
-### KAIZEN v08.0 · Built by Corvus-One
+### KAIZEN v09.0 · Built by Corvus-One
 
 ![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)
-![Version](https://img.shields.io/badge/version-v08.0-7c6af7)
+![Version](https://img.shields.io/badge/version-v09.0-7c6af7)
 ![Built with](https://img.shields.io/badge/built%20with-Claude-ff8a65)
 
 A single-file progressive web app for professionals pursuing senior security leadership roles. Track daily habits, manage goals, prep for interviews, count down to certifications, and generate weekly progress reports — all from one tool that runs in your browser and installs on your phone.
 
-**[🚀 Open Live Tracker](https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v08.html)**
+**[🚀 Open Live Tracker](https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v09.html)**
 
 ![CISO Career Tracker Preview](CISO_Tracker_social_preview.svg)
 
@@ -42,7 +42,7 @@ A single-file progressive web app for professionals pursuing senior security lea
 
 **Use it instantly — no installation required:**
 
-1. Click → **[Open Live Tracker](https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v08.html)**
+1. Click → **[Open Live Tracker](https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v09.html)**
 2. On first load, optionally add your [OpenRouter](https://openrouter.ai) API key to activate the AI Coach
 3. Start tracking
 
@@ -65,7 +65,7 @@ This tracker was built for cybersecurity / CISO career development but the syste
 Click the green **Use this template** button at the top of this repo to create your own copy.
 
 ### Step 2 — Open the HTML file
-Open `CISO_Tracker_kaizen_v08.html` in a text editor (Notepad on Windows, TextEdit on Mac, or VS Code).
+Open `CISO_Tracker_kaizen_v09.html` in a text editor (Notepad on Windows, TextEdit on Mac, or VS Code).
 
 ### Step 3 — Customize Your Habits
 Find this section in the code (search for `let HABITS`):
@@ -101,7 +101,7 @@ Upload to your own GitHub repo, enable GitHub Pages, and your tracker is live.
 
 ```
 ciso-career-tracker/
-├── CISO_Tracker_kaizen_v08.html    ← Main app (everything in one file)
+├── CISO_Tracker_kaizen_v09.html    ← Main app (everything in one file)
 ├── CISO_Tracker_manifest.json      ← PWA manifest (install as app)
 ├── CISO_Tracker_service-worker.js  ← Offline caching
 └── README.md                       ← This file

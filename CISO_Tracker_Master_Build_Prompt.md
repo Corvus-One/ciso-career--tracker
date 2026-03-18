@@ -1,6 +1,6 @@
 # 🛡️ CISO Career Tracker — Master Build Prompt
 ### For use at the start of any new Claude session
-### Version: KAIZEN v08.0 · Last Updated: March 17, 2026
+### Version: KAIZEN v09.0 · Last Updated: March 17, 2026
 
 ---
 
@@ -8,7 +8,7 @@
 >
 > Add this line at the very top:
 > ```
-> Continue development of the CISO Career Tracker using the rules below. Current version is KAIZEN v08.0.
+> Continue development of the CISO Career Tracker using the rules below. Current version is KAIZEN v09.0.
 > ```
 
 ---
@@ -22,8 +22,8 @@
 - The file owner is neurodivergent — always communicate one concept at a time, with visual step-by-step instructions and clear checkpoints
 
 **Repository:** `github.com/Corvus-One/ciso-career-tracker`
-**Live URL:** `https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v08.html`
-**Current Version:** KAIZEN v08.0
+**Live URL:** `https://corvus-one.github.io/ciso-career-tracker/CISO_Tracker_kaizen_v09.html`
+**Current Version:** KAIZEN v09.0
 **Storage Key Suffix:** `_v30` — stable, never change
 
 ---
@@ -32,7 +32,7 @@
 
 - Always deliver files **individually** — NEVER as a zip
 - Always prefix every file with: `CISO_Tracker_`
-  - `CISO_Tracker_kaizen_v08.html`
+  - `CISO_Tracker_kaizen_v09.html`
   - `CISO_Tracker_manifest.json`
   - `CISO_Tracker_service-worker.js`
 - Maximum **3 files** delivered per shift
@@ -294,7 +294,7 @@ Never hardcode dark hex values in CSS rules. Always use tokens.
 **Repo root files:**
 ```
 ciso-career-tracker/
-├── CISO_Tracker_kaizen_v08.html
+├── CISO_Tracker_kaizen_v09.html
 ├── CISO_Tracker_manifest.json
 ├── CISO_Tracker_service-worker.js
 ├── CISO_Tracker_social_preview.svg
@@ -426,12 +426,12 @@ When checkpoint is called:
 ## SECTION 18 — Quick Reference
 
 ```
-Current version:      KAIZEN v08.0
+Current version:      KAIZEN v09.0
 Next version:         KAIZEN v09.0
 Storage key suffix:   _v30 (never change)
 Repo:                 github.com/Corvus-One/ciso-career-tracker
 Live URL:             https://corvus-one.github.io/ciso-career-tracker/
-                      CISO_Tracker_kaizen_v08.html
+                      CISO_Tracker_kaizen_v09.html
 License:              CC BY-NC 4.0
 Copyright:            © 2026 Corvus-One (Brihan)
 File prefix:          CISO_Tracker_

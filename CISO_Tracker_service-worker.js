@@ -1,9 +1,9 @@
 // CISO Career Tracker · Service Worker · KAIZEN v05.0
-const CACHE_NAME = 'ciso-tracker-v08';
+const CACHE_NAME = 'ciso-tracker-v09';
 const BASE = '/ciso-career-tracker/';
 
 const ASSETS_TO_CACHE = [
-  BASE + 'CISO_Tracker_kaizen_v08.html',
+  BASE + 'CISO_Tracker_kaizen_v09.html',
   BASE + 'CISO_Tracker_manifest.json',
   'https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap',
 ];
@@ -66,7 +66,7 @@ self.addEventListener('fetch', event => {
         return response;
       }).catch(() => {
         // Offline fallback — return cached main HTML
-        return caches.match(BASE + 'CISO_Tracker_kaizen_v08.html');
+        return caches.match(BASE + 'CISO_Tracker_kaizen_v09.html');
       });
     })
   );
